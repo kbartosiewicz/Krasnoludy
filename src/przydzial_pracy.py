@@ -20,7 +20,7 @@ class MenadzerPrzydzialu:
 
         for z in self.zloza:
             # Złoże przyjmuje tylu krasnali, ile wynosi wydajność
-            self.siec.dodaj_krawedz(z.nazwa, self.ujscie, z.wydajnosc)
+            self.siec.dodaj_krawedz(z.id_zloza, self.ujscie, z.wydajnosc)
 
     def oblicz_maksymalne_wydobycie(self):
         """Implementacja algorytmu Edmondsa-Karpa."""
@@ -48,4 +48,4 @@ class MenadzerPrzydzialu:
                 e.przeplyw += 1
                 e.odwrotna.przeplyw -= 1
                 aktualny = rodzic[aktualny]
-        return przeplyw_calkowity 
+        return przeplyw_calkowity
