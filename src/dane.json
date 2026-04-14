@@ -1,0 +1,44 @@
+{
+  "krasnale": [
+    {"id": "K1", "imie": "Gimli", "umiejetnosci": ["Z1", "Z5"]},
+    {"id": "K2", "imie": "Thorin", "umiejetnosci": ["Z1", "Z4"]},
+    {"id": "K3", "imie": "Balin", "umiejetnosci": ["Z2", "Z5", "Z6"]},
+    {"id": "K4", "imie": "Dwalin", "umiejetnosci": ["Z5", "Z6"]},
+    {"id": "K5", "imie": "Kili", "umiejetnosci": ["Z1", "Z3"]},
+    {"id": "K6", "imie": "Fili", "umiejetnosci": ["Z1", "Z3"]},
+    {"id": "K7", "imie": "Oin", "umiejetnosci": ["Z2", "Z4"]},
+    {"id": "K8", "imie": "Gloin", "umiejetnosci": ["Z1", "Z4"]},
+    {"id": "K9", "imie": "Dori", "umiejetnosci": ["Z2"]},
+    {"id": "K10", "imie": "Nori", "umiejetnosci": ["Z2", "Z5"]},
+    {"id": "K11", "imie": "Ori", "umiejetnosci": ["Z2", "Z6"]},
+    {"id": "K12", "imie": "Bifur", "umiejetnosci": ["Z3", "Z6"]},
+    {"id": "K13", "imie": "Bofur", "umiejetnosci": ["Z3", "Z6"]},
+    {"id": "K14", "imie": "Bombur", "umiejetnosci": ["Z2"]},
+    {"id": "K15", "imie": "Durin", "umiejetnosci": ["Z1", "Z4", "Z5"]}
+  ],
+  "zloza": [
+    {"id": "Z1", "nazwa": "Złoto", "wydajnosc": 3},
+    {"id": "Z2", "nazwa": "Węgiel", "wydajnosc": 5},
+    {"id": "Z3", "nazwa": "Srebro", "wydajnosc": 2},
+    {"id": "Z4", "nazwa": "Diamenty", "wydajnosc": 2},
+    {"id": "Z5", "nazwa": "Żelazo", "wydajnosc": 4},
+    {"id": "Z6", "nazwa": "Miedź", "wydajnosc": 3}
+  ],
+  "odleglosci": [
+    {"krasnal": "K1", "zloze": "Z1", "wartosc": 45}, {"krasnal": "K1", "zloze": "Z5", "wartosc": 12},
+    {"krasnal": "K2", "zloze": "Z1", "wartosc": 10}, {"krasnal": "K2", "zloze": "Z4", "wartosc": 50},
+    {"krasnal": "K3", "zloze": "Z2", "wartosc": 18}, {"krasnal": "K3", "zloze": "Z5", "wartosc": 22}, {"krasnal": "K3", "zloze": "Z6", "wartosc": 15},
+    {"krasnal": "K4", "zloze": "Z5", "wartosc": 30}, {"krasnal": "K4", "zloze": "Z6", "wartosc": 25},
+    {"krasnal": "K5", "zloze": "Z1", "wartosc": 14}, {"krasnal": "K5", "zloze": "Z3", "wartosc": 40},
+    {"krasnal": "K6", "zloze": "Z1", "wartosc": 16}, {"krasnal": "K6", "zloze": "Z3", "wartosc": 35},
+    {"krasnal": "K7", "zloze": "Z2", "wartosc": 5},  {"krasnal": "K7", "zloze": "Z4", "wartosc": 45},
+    {"krasnal": "K8", "zloze": "Z1", "wartosc": 20}, {"krasnal": "K8", "zloze": "Z4", "wartosc": 10},
+    {"krasnal": "K9", "zloze": "Z2", "wartosc": 12},
+    {"krasnal": "K10", "zloze": "Z2", "wartosc": 25}, {"krasnal": "K10", "zloze": "Z5", "wartosc": 18},
+    {"krasnal": "K11", "zloze": "Z2", "wartosc": 30}, {"krasnal": "K11", "zloze": "Z6", "wartosc": 8},
+    {"krasnal": "K12", "zloze": "Z3", "wartosc": 15}, {"krasnal": "K12", "zloze": "Z6", "wartosc": 22},
+    {"krasnal": "K13", "zloze": "Z3", "wartosc": 10}, {"krasnal": "K13", "zloze": "Z6", "wartosc": 40},
+    {"krasnal": "K14", "zloze": "Z2", "wartosc": 5},
+    {"krasnal": "K15", "zloze": "Z1", "wartosc": 35}, {"krasnal": "K15", "zloze": "Z4", "wartosc": 15}, {"krasnal": "K15", "zloze": "Z5", "wartosc": 20}
+  ]
+}
