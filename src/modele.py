@@ -1,7 +1,7 @@
 class Krasnal:
-    def __init__(self, imie, id_krasnala, umiejetnosci):
-        self.imie = imie
+    def __init__(self, id_krasnala, imie, umiejetnosci):
         self.id_krasnala = id_krasnala
+        self.imie = imie
         self.umiejetnosci = umiejetnosci  # Lista minerałów, które potrafi wydobywać
 
 class Zloze:

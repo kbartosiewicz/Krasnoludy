@@ -6,7 +6,7 @@ def zaladuj_dane(plik):
     with open(plik, 'r', encoding='utf-8') as f:
         dane = json.load(f)
     
-    krasnale = [Krasnal(k['imie'], k['id'], k['umiejetnosci']) for k in dane['krasnale']]
+    krasnale = [Krasnal(k['id'], k['imie'], k['umiejetnosci']) for k in dane['krasnale']]
     zloza = [Zloze(z['id'], z['nazwa'], z['wydajnosc']) for z in dane['zloza']]
     
     tabela_odl = {}
