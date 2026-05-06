@@ -113,3 +113,15 @@ class MenadzerPrzydzialu:
                 aktualny = rodzic[aktualny]
 
         return przeplyw_calkowity, koszt_calkowity
+    
+    def daj_aktywne_zloza(self):
+       #Zwraca listę złóż, w których pracują krasnale (przepływ > 0).
+        aktywne = []
+        for z in self.zloza:
+            # Szukamy krawędzi idących ze złoża do ujścia
+            krawedzie = self.siec.sasiedztwo.get(z.id_zloza, [])
+            for krawedz in krawedzie:
+                if krawedz.cel == self.ujscie and krawedz.przeplyw > 0:
+                    aktywne.append(z)
+                    break # Wystarczy, że złoże jest używane, nie liczymy go podwójnie
+        return aktywne
