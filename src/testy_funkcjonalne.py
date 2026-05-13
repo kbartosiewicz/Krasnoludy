@@ -10,10 +10,10 @@ def uruchom_test(nazwa, krasnale, zloza, oczekiwany_wynik):
     wynik = menadzer.oblicz_maksymalne_wydobycie()
     
     if wynik == oczekiwany_wynik:
-        print("✅ SUKCES")
+        print(" SUKCES")
         return True
     else:
-        print(f"❌ BŁĄD (Dostałem {wynik}, oczekiwałem {oczekiwany_wynik})")
+        print(f" BŁĄD (Dostałem {wynik}, oczekiwałem {oczekiwany_wynik})")
         return False
 
 def uruchom_test_otoczki(nazwa, punkty, oczekiwana_otoczka, oczekiwany_obwod=None):
@@ -25,13 +25,13 @@ def uruchom_test_otoczki(nazwa, punkty, oczekiwana_otoczka, oczekiwany_obwod=Non
         if oczekiwany_obwod is not None:
             obwod = calculate_perimeter(wynik_otoczki)
             if math.isclose(obwod, oczekiwany_obwod, abs_tol=1e-5):
-                print("✅ SUKCES")
+                print(" SUKCES")
             else:
-                print(f"❌ BŁĄD OBWODU (Dostałem {obwod}, oczekiwałem {oczekiwany_obwod})")
+                print(f" BŁĄD OBWODU (Dostałem {obwod}, oczekiwałem {oczekiwany_obwod})")
         else:
-            print("✅ SUKCES")
+            print(" SUKCES")
     else:
-        print(f"❌ BŁĄD OTOCZKI\n  Dostałem:    {wynik_otoczki}\n  Oczekiwałem: {oczekiwana_otoczka}")
+        print(f" BŁĄD OTOCZKI\n  Dostałem:    {wynik_otoczki}\n  Oczekiwałem: {oczekiwana_otoczka}")
 # --- DEFINICJE TESTÓW ---
 
 def testy_podstawowe():
