@@ -23,7 +23,7 @@ modul = st.sidebar.radio(
      "🛡️ Moduł III: Obrona Granic (Struktury)"]
 )
 
-# INICJALIZACJA PAMIĘCI SESJI (Żeby dane nie resetowały się przy kliknięciach)
+# INICJALIZACJA PAMIĘCI SESJI
 if 'krasnale_m1' not in st.session_state:
     st.session_state.zloza_m1 = [Zloze("Z1", "Kopalnia_Z1", 2), Zloze("Z2", "Kopalnia_Z2", 2), Zloze("Z3", "Kopalnia_Z3", 1)]
     st.session_state.krasnale_m1 = [
@@ -33,6 +33,13 @@ if 'krasnale_m1' not in st.session_state:
         Krasnal("K4", "Wesołek", ["Z3"]),
         Krasnal("K5", "Nieśmiałek", ["Z2"])
     ]
+    
+    # DODANO: Tabela odległości (kosztów)
+    st.session_state.tabela_odl = {}
+    for k in st.session_state.krasnale_m1:
+        for z_id in k.umiejetnosci:
+            # Losowa odległość od 1 do 20 km
+            st.session_state.tabela_odl[(k.id_krasnala, z_id)] = random.randint(1, 20)
 
 if 'punkty_m2' not in st.session_state:
     st.session_state.punkty_m2 = [(2.0, 3.0), (5.0, 8.0), (1.0, 6.0), (8.0, 2.0), (4.0, 4.0), (7.0, 7.0)]
@@ -55,17 +62,15 @@ if 'dekametrowcy' not in st.session_state:
 # MODUŁ I: PRZYDZIAŁ PRACY (GRAFY)
 # ==========================================
 if modul == "⚒️ Moduł I: Przydział Pracy (Grafy)":
-    st.header("⚒️ Interaktywne Zarządzanie i Przydział Pracy")
+    st.header("⚒️ Interaktywne Zarządzanie i Przydział Pracy (MCMF)")
     
     col_menu, col_graf = st.columns([1, 2])
 
     with col_menu:
         st.subheader("⚙️ Zarządzanie Zasobami")
         
-        # DODANO: Sekcja dynamicznego zarządzania złożami (CRUD)
+        # Sekcja zarządzania złożami
         st.write("**--- Zarządzanie Złożami ---**")
-        
-        # Tworzenie nowego złoża
         with st.expander("➕ Dodaj Nowe Złoże"):
             nowe_z_nazwa = st.text_input("Nazwa nowego złoża:", "Kopalnia_Z4")
             nowe_z_wydajnosc = st.number_input("Wydajność złoża:", min_value=1, max_value=10, value=2, key="nowe_z_wyd")
@@ -77,40 +82,43 @@ if modul == "⚒️ Moduł I: Przydział Pracy (Grafy)":
                 st.success(f"Dodano złoże {nowe_z_nazwa} ({nowe_id})!")
                 st.rerun()
         
-        # Pętla wyświetlania obecnych złóż wraz z opcją edycji i usuwania
         zloza_kopia = list(st.session_state.zloza_m1)
         for idx, z in enumerate(zloza_kopia):
             c_input, c_del = st.columns([4, 1])
             with c_input:
                 z.wydajnosc = st.number_input(f"Wydajność {z.nazwa} ({z.id_zloza}):", min_value=0, max_value=10, value=int(z.wydajnosc), key=f"wyd_{z.id_zloza}")
             with c_del:
-                st.write("<br>", unsafe_allow_html=True) # Wyrównanie w pionie do pola input
+                st.write("<br>", unsafe_allow_html=True)
                 if st.button("🗑️", key=f"del_zloze_{z.id_zloza}"):
                     st.session_state.zloza_m1.pop(idx)
-                    # Usunięcie unieważnionego złoża z fachu krasnoludków, by zapobiec błędom indeksacji grafu
                     for k in st.session_state.krasnale_m1:
                         if z.id_zloza in k.umiejetnosci:
                             k.umiejetnosci.remove(z.id_zloza)
+                            # Usuwamy też odległość
+                            if (k.id_krasnala, z.id_zloza) in st.session_state.tabela_odl:
+                                del st.session_state.tabela_odl[(k.id_krasnala, z.id_zloza)]
                     st.rerun()
         
         st.write("**--- Modyfikacja Krasnali ---**")
-        # Wybór krasnala do edycji
         k_id = [k.id_krasnala for k in st.session_state.krasnale_m1]
         wybrany_k_id = st.selectbox("Wybierz krasnala do edycji:", k_id)
         wybrany_k = next(k for k in st.session_state.krasnale_m1 if k.id_krasnala == wybrany_k_id)
 
-        st.write(f"Aktualne umiejętności krasnala `{wybrany_k.imie}`: `{wybrany_k.umiejetnosci}`")
+        st.write(f"Aktualne umiejętności: `{wybrany_k.umiejetnosci}`")
         
-        # Dodawanie/Usuwanie umiejętności
         wszystkie_zloza_ids = [z.id_zloza for z in st.session_state.zloza_m1]
         nowe_umiejetnosci = st.multiselect("Zmień fachy krasnala:", wszystkie_zloza_ids, default=[u for u in wybrany_k.umiejetnosci if u in wszystkie_zloza_ids], key=f"um_{wybrany_k.id_krasnala}")
         
         if st.button("Zatwierdź zmiany fachu"):
+            # Generowanie odległości dla nowych fachów
+            for fach in nowe_umiejetnosci:
+                if (wybrany_k.id_krasnala, fach) not in st.session_state.tabela_odl:
+                    st.session_state.tabela_odl[(wybrany_k.id_krasnala, fach)] = random.randint(1, 20)
+            
             wybrany_k.umiejetnosci = nowe_umiejetnosci
             st.success(f"Zaktualizowano fachy dla {wybrany_k.imie}!")
             st.rerun()
 
-        # Dodawanie nowego krasnala
         st.write("**--- Dodaj Nowego Krasnala ---**")
         nowe_imie = st.text_input("Imię nowego krasnala:")
         nowe_fachy = st.multiselect("Fachy nowego krasnala:", wszystkie_zloza_ids)
@@ -118,28 +126,39 @@ if modul == "⚒️ Moduł I: Przydział Pracy (Grafy)":
             new_id = f"K{len(st.session_state.krasnale_m1) + 1}"
             while any(k.id_krasnala == new_id for k in st.session_state.krasnale_m1):
                 new_id = f"K{random.randint(10, 99)}"
+            
             st.session_state.krasnale_m1.append(Krasnal(new_id, nowe_imie, nowe_fachy))
+            
+            # Generowanie odległości
+            for fach in nowe_fachy:
+                 st.session_state.tabela_odl[(new_id, fach)] = random.randint(1, 20)
+                 
             st.success(f"Dodano krasnala {nowe_imie}!")
             st.rerun()
 
     with col_graf:
-        st.subheader("📊 Optymalna Sieć Przepływowa")
+        st.subheader("📊 Sieć Przepływowa (Min. Koszt / Max. Wydobycie)")
         
         if not st.session_state.zloza_m1 or not st.session_state.krasnale_m1:
             st.warning("Do wyznaczenia sieci przepływowej wymagane jest posiadanie przynajmniej 1 złoża i 1 krasnala.")
         else:
-            # Obliczenia algorytmu
-            menadzer = MenadzerPrzydzialu(st.session_state.krasnale_m1, st.session_state.zloza_m1)
+            # Przekazanie tabeli odległości do menedżera
+            menadzer = MenadzerPrzydzialu(st.session_state.krasnale_m1, st.session_state.zloza_m1, st.session_state.tabela_odl)
             menadzer.buduj_siec()
-            max_przeplyw = menadzer.oblicz_maksymalne_wydobycie()
             
-            st.metric(label="Maksymalna liczba zatrudnionych osób", value=f"{max_przeplyw} krasnali")
+            # DODANO: Użycie algorytmu MCMF zamiast Edmondsa-Karpa
+            max_przeplyw, min_koszt = menadzer.oblicz_mcmf()
+            
+            col_res1, col_res2 = st.columns(2)
+            with col_res1:
+                st.metric(label="Maksymalnie zatrudnieni (max_flow)", value=f"{max_przeplyw} krasnali")
+            with col_res2:
+                st.metric(label="Łączny dystans do pracy (min_cost)", value=f"{min_koszt} km")
 
             # Rysowanie Grafu
             G = nx.DiGraph()
             pos = {"START": (0, 0), "KONIEC": (3, 0)}
             
-            # Zapobieganie ZeroDivisionError przy pustych lub jednoelementowych strukturach kadr
             len_k = max(1, len(st.session_state.krasnale_m1) - 1)
             len_z = max(1, len(st.session_state.zloza_m1) - 1)
             
@@ -151,22 +170,23 @@ if modul == "⚒️ Moduł I: Przydział Pracy (Grafy)":
             for u, edges in menadzer.siec.sasiedztwo.items():
                 for e in edges:
                     if e.przepustowosc > 0:
-                        G.add_edge(u, e.cel, flow=f"{e.przeplyw}/{e.przepustowosc}")
+                        # DODANO: Formatowanie etykiet z uwzględnieniem kosztu (odległości)
+                        koszt_str = f" | {e.koszt}km" if e.koszt > 0 and u != "START" and e.cel != "KONIEC" else ""
+                        G.add_edge(u, e.cel, flow=f"{e.przeplyw}/{e.przepustowosc}{koszt_str}")
 
             fig, ax = plt.subplots(figsize=(14, 9))
             edge_labels = nx.get_edge_attributes(G, 'flow')
             
-            # Rysowanie węzłów i etykiet tekstowych wierzchołków
             nx.draw_networkx_nodes(G, pos, node_color='#deff9a', node_size=2800, edgecolors='#777777', ax=ax)
             nx.draw_networkx_labels(G, pos, font_size=10, font_weight='bold', ax=ax)
             
-            # POPRAWKA WIDOCZNOŚCI: Dodanie łuków (rad=0.15) do krawędzi, by linie nie nakładały się na siebie
+            # Łuki dla lepszej widoczności
             nx.draw_networkx_edges(
                 G, pos, edge_color='#777777', arrows=True, arrowsize=15,
                 connectionstyle='arc3,rad=0.15', width=1.2, ax=ax
             )
             
-            # POPRAWKA CZYTELNOŚCI TEKSTU: rotate=True dopasowuje tekst do kąta łuku, label_pos odsuwa od węzłów centralnych
+            # Etykiety rotowane, przesunięte i z dopasowaniem do łuków
             nx.draw_networkx_edge_labels(
                 G, pos, edge_labels=edge_labels, ax=ax, font_color='red', 
                 font_weight='bold', font_size=9, label_pos=0.55, rotate=True,
