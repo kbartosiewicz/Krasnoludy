@@ -1,0 +1,20 @@
+{
+  "krasnale": [
+    {"id": "K1", "imie": "Gimli", "umiejetnosci": ["Z1"], "glosnosc": 50},
+    {"id": "K2", "imie": "Thorin", "umiejetnosci": ["Z1"], "glosnosc": 50},
+    {"id": "K3", "imie": "Balin", "umiejetnosci": ["Z1"], "glosnosc": 50},
+    {"id": "K4", "imie": "Dwalin", "umiejetnosci": ["Z1"], "glosnosc": 50},
+    {"id": "K5", "imie": "Kili", "umiejetnosci": ["Z1"], "glosnosc": 50}
+  ],
+  "zloza": [
+    {"id": "Z1", "nazwa": "Złoto", "wydajnosc": 2, "x": 10.0, "y": 10.0},
+    {"id": "Z2", "nazwa": "Węgiel", "wydajnosc": 10, "x": 5.0, "y": 5.0}
+  ],
+  "odleglosci": [
+    {"krasnal": "K1", "zloze": "Z1", "wartosc": 10},
+    {"krasnal": "K2", "zloze": "Z1", "wartosc": 15},
+    {"krasnal": "K3", "zloze": "Z1", "wartosc": 20},
+    {"krasnal": "K4", "zloze": "Z1", "wartosc": 5},
+    {"krasnal": "K5", "zloze": "Z1", "wartosc": 25}
+  ]
+}
