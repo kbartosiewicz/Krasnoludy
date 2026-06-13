@@ -2,6 +2,7 @@ from modele import Krasnal, Zloze
 from przydzial_pracy import MenadzerPrzydzialu
 import math
 from otoczka import get_convex_hull, calculate_perimeter
+from struktury import KompresorKsiag
 
 def uruchom_test(nazwa, krasnale, zloza, oczekiwany_wynik):
     print(f"Uruchamianie: {nazwa}...", end=" ")
@@ -32,6 +33,19 @@ def uruchom_test_otoczki(nazwa, punkty, oczekiwana_otoczka, oczekiwany_obwod=Non
             print(" SUKCES")
     else:
         print(f" BŁĄD OTOCZKI\n  Dostałem:    {wynik_otoczki}\n  Oczekiwałem: {oczekiwana_otoczka}")
+
+def uruchom_test_ksiegi(nazwa, tekst, wzorzec, oczekiwane_indeksy):
+    print(f"Uruchamianie: {nazwa}...", end=" ")
+    kompresor = KompresorKsiag()
+    wynik_indeksy = kompresor.szukaj_kmp(tekst, wzorzec)
+    
+    if wynik_indeksy == oczekiwane_indeksy:
+        print(" SUKCES")
+        return True
+    else:
+        print(f" BŁĄD (Dostałem {wynik_indeksy}, oczekiwałem {oczekiwane_indeksy})")
+        return False
+
 # --- DEFINICJE TESTÓW ---
 
 def testy_podstawowe():
@@ -70,6 +84,12 @@ def testy_geometrii():
     o4 = [(0, 0), (4, 0), (2, 4)]
     uruchom_test_otoczki("TO4: Trójkąt", p4, o4, 12.94427190999916)
 
+def testy_ksiegi():
+    tekst = "ABCDBABCABBCDABCAB"
+    wzorzec = "ABCAB"
+    uruchom_test_ksiegi("TK1: Zwykły tekst (przykład z wykładu)", tekst, wzorzec, [5, 13])
+    uruchom_test_ksiegi("TK2: Brak wzorca w tekście", tekst, "OWSIANKA", [])
+
 if __name__ == "__main__":
     print("=== ROZPOCZĘCIE TESTÓW FUNKCJONALNYCH ===\n")
     print("--- GRAFY (PRZYDZIAŁ KRASNALI) ---")
@@ -77,4 +97,6 @@ if __name__ == "__main__":
     testy_brzegowe()
     print("\n--- GEOMETRIA (OTOCZKA WYPUKŁA) ---")
     testy_geometrii()
+    print("\n--- KOMPRESJA I WYSZUKIWANIE (KSIĘGI) ---")
+    testy_ksiegi()
     print("\n=== TESTY ZAKOŃCZONE ===")
