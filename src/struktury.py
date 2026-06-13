@@ -1,3 +1,6 @@
+import heapq
+from collections import Counter
+
 class Krawedz:
     def __init__(self, cel, przepustowosc, koszt=0):
         self.cel = cel      # Wierzchołek docelowy
@@ -89,3 +92,84 @@ class DrzewoPrzedzialowe:
         # poczatek i koniec to metry granicy (indeksy tablicy)
         wynik = self._query(1, 0, self.n - 1, poczatek, koniec)
         return wynik
+    
+
+class WezelHuffmana:
+    def __init__(self, char, freq):
+        self.char = char
+        self.freq = freq
+        self.left = None
+        self.right = None
+
+    def __lt__(self, other):
+        return self.freq < other.freq
+
+class KompresorKsiag:
+    def buduj_drzewo_huffmana(self, tekst):
+        if not tekst:
+            return None
+            
+        czestotliwosci = Counter(tekst)
+        Q = [WezelHuffmana(char, freq) for char, freq in czestotliwosci.items()]
+        heapq.heapify(Q) 
+        n = len(Q)
+        
+        for _ in range(n - 1):
+            z = WezelHuffmana(None, 0)
+            z.left = x = heapq.heappop(Q)
+            z.right = y = heapq.heappop(Q)
+            z.freq = x.freq + y.freq
+            heapq.heappush(Q, z)
+            
+        return heapq.heappop(Q)
+
+    def generuj_kody(self, wezel, aktualny_kod="", kody=None):
+        if kody is None:
+            kody = {}
+        if wezel is not None:
+            if wezel.char is not None:
+                kody[wezel.char] = aktualny_kod
+            self.generuj_kody(wezel.left, aktualny_kod + "0", kody)
+            self.generuj_kody(wezel.right, aktualny_kod + "1", kody)
+        return kody
+
+    def kompresuj_tekst(self, tekst):
+        korzen = self.buduj_drzewo_huffmana(tekst)
+        kody = self.generuj_kody(korzen)
+        skompresowany = "".join([kody[znak] for znak in tekst])
+        return skompresowany, korzen
+
+    def wyznacz_tablice_pi(self, P):
+        m = len(P)
+        pi = [0] * m
+        pi[0] = 0
+        k = 0
+        
+        for q in range(1, m):
+            while k > 0 and P[k] != P[q]: 
+                k = pi[k - 1] 
+            if P[k] == P[q]: 
+                k += 1
+            pi[q] = k 
+        return pi
+
+    def szukaj_kmp(self, T, P):
+        n = len(T)
+        m = len(P)
+        if m == 0 or n == 0:
+            return []
+            
+        pi = self.wyznacz_tablice_pi(P) 
+        q = 0 
+        indeksy = []
+        
+        for i in range(n):
+            while q > 0 and P[q] != T[i]:
+                q = pi[q - 1]
+            if P[q] == T[i]:
+                q += 1
+            if q == m:
+                indeksy.append(i - m + 1)
+                q = pi[q - 1]
+                
+        return indeksy
