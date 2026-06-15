@@ -139,6 +139,25 @@ class KompresorKsiag:
         skompresowany = "".join([kody[znak] for znak in tekst])
         return skompresowany, korzen
 
+    def dekompresuj_tekst(self, skompresowany_tekst, korzen):
+        if not skompresowany_tekst or not korzen:
+            return ""
+            
+        odkodowany_tekst = []
+        aktualny_wezel = korzen
+        
+        for bit in skompresowany_tekst:
+            if bit == '0':
+                aktualny_wezel = aktualny_wezel.left
+            else:
+                aktualny_wezel = aktualny_wezel.right
+                
+            if aktualny_wezel.char is not None:
+                odkodowany_tekst.append(aktualny_wezel.char)
+                aktualny_wezel = korzen
+                
+        return "".join(odkodowany_tekst)
+
     def wyznacz_tablice_pi(self, P):
         m = len(P)
         pi = [0] * m
