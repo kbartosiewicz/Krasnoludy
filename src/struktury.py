@@ -34,7 +34,6 @@ class DrzewoPrzedzialowe:
         self.e = (float('-inf'), None)
         
         if self.n > 0:
-            # Wykład zakłada indeksowanie 1..n w pythonie używamy 0..n-1
             self.build(1, 0, self.n - 1)
 
     def f(self, x, y):
@@ -113,6 +112,14 @@ class KompresorKsiag:
         Q = [WezelHuffmana(char, freq) for char, freq in czestotliwosci.items()]
         heapq.heapify(Q) 
         n = len(Q)
+
+        # --- ZABEZPIECZENIE PRZED JEDNYM ZNAKIEM ---
+        if n == 1:
+            pojedynczy_wezel = heapq.heappop(Q)
+            # Tworzymy sztuczny korzeń
+            z = WezelHuffmana(None, pojedynczy_wezel.freq)
+            z.left = pojedynczy_wezel
+            heapq.heappush(Q, z)
         
         for _ in range(n - 1):
             z = WezelHuffmana(None, 0)
@@ -140,6 +147,10 @@ class KompresorKsiag:
         return skompresowany, korzen
 
     def dekompresuj_tekst(self, skompresowany_tekst, korzen):
+        """
+        Dekoduje ciąg zer i jedynek z powrotem na tekst na podstawie drzewa Huffmana.
+        """
+        
         if not skompresowany_tekst or not korzen:
             return ""
             

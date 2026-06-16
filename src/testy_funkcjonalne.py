@@ -46,6 +46,28 @@ def uruchom_test_ksiegi(nazwa, tekst, wzorzec, oczekiwane_indeksy):
         print(f" BŁĄD (Dostałem {wynik_indeksy}, oczekiwałem {oczekiwane_indeksy})")
         return False
 
+def uruchom_test_bezstratnosci(nazwa, tekst_oryginalny):
+    print(f"Uruchamianie: {nazwa}...", end=" ")
+    kompresor = KompresorKsiag()
+    
+    # 1. Kompresja
+    bity, drzewo = kompresor.kompresuj_tekst(tekst_oryginalny)
+    
+    if drzewo is None:
+        print(" BŁĄD (Drzewo Huffmana nie zostało wygenerowane)")
+        return False
+        
+    # 2. Dekompresja
+    tekst_odkodowany = kompresor.dekompresuj_tekst(bity, drzewo)
+    
+    # 3. Weryfikacja bezstratności 1:1
+    if tekst_odkodowany == tekst_oryginalny:
+        print(" SUKCES")
+        return True
+    else:
+        print(f" BŁĄD (Tekst utracił spójność podczas dekodowania!)")
+        return False
+
 # --- DEFINICJE TESTÓW ---
 
 def testy_podstawowe():
@@ -89,6 +111,18 @@ def testy_ksiegi():
     wzorzec = "ABCAB"
     uruchom_test_ksiegi("TK1: Zwykły tekst (przykład z wykładu)", tekst, wzorzec, [5, 13])
     uruchom_test_ksiegi("TK2: Brak wzorca w tekście", tekst, "OWSIANKA", [])
+
+    tekst_krotki = "KROLEWNA SNIEZKA"
+    uruchom_test_bezstratnosci("TK3.1: Bezbłędność dekodowania (Krótki tekst)", tekst_krotki)
+    
+    tekst_dlugi = "W królestwie krasnali praca wre! Złoże nr 1 (Diamenty) działa na 100%."
+    uruchom_test_bezstratnosci("TK3.2: Bezbłędność dekodowania (Polskie znaki i interpunkcja)", tekst_dlugi)
+    
+    tekst_powtarzalny = "AAAAABBBBBCCCCCDDDDD"
+    uruchom_test_bezstratnosci("TK3.3: Bezbłędność dekodowania (Tekst monotonny)", tekst_powtarzalny)
+
+    tekst_jeden_znak = "AAAAAAA"
+    uruchom_test_bezstratnosci("TK3.4: Ekstremalny przypadek (Jeden unikalny znak)", tekst_jeden_znak)
 
 if __name__ == "__main__":
     print("=== ROZPOCZĘCIE TESTÓW FUNKCJONALNYCH ===\n")

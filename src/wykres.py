@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 
-# Dane z Twoich pomiarów
 krasnale = [100, 1000, 5000, 10000, 20000]
 zloza = [50, 500, 1000, 2000, 4000]
 czasy = [0.0980, 3.9080, 11.9962, 53.7679, 326.6212]
