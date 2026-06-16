@@ -4,7 +4,7 @@ from functools import cmp_to_key
 def det(p0, pi, pj):
     """
     Wyznacznik dokładnie według wzoru ze slajdu 5 i 11.
-    Ważne: p0 to wierzchołek (punkt odniesienia)[cite: 2].
+    Ważne: p0 to wierzchołek (punkt odniesienia).
     """
     return (pi[0] - p0[0]) * (pj[1] - p0[1]) - (pj[0] - p0[0]) * (pi[1] - p0[1])
 
@@ -14,7 +14,7 @@ def distance_sq(p1, p2):
 
 def get_convex_hull(points):
     """Algorytm Grahama zgodny z wykładem i poprawny dla testów kwadratu."""
-    if len(points) <= 3:
+    if len(points) <= 2:
         return list(set(points))
 
     # KROK 1: Wybierz punkt p0 (najmniejsze y, potem najmniejsze x).

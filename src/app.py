@@ -437,10 +437,6 @@ elif modul == "🐎 Moduł II: Patrol Księcia (Otoczka wypukła)":
     else:
         aktywne_zloza = []
 
-    # 2. Pobieramy współrzędne TYLKO dla aktywnych złóż
-    aktualne_punkty = [(z.x, z.y) for z in aktywne_zloza]
-    mapa_nazw = {(z.x, z.y): z.id_zloza for z in aktywne_zloza}
-
     col_punkty, col_mapa = st.columns([1, 1.5])
 
     with col_punkty:
@@ -474,6 +470,9 @@ elif modul == "🐎 Moduł II: Patrol Księcia (Otoczka wypukła)":
 
     with col_mapa:
 
+        # 2. Pobieramy współrzędne TYLKO dla aktywnych złóż
+        aktualne_punkty = [(z.x, z.y) for z in aktywne_zloza]
+        mapa_nazw = {(z.x, z.y): z.id_zloza for z in aktywne_zloza}
         
         if len(aktualne_punkty) == 0:
             st.warning("Królestwo nie posiada obecnie żadnych AKTYWNYCH złóż (z przypisanymi pracownikami i przepływem > 0). Wróć do Modułu I i zadbaj o przydział!")
@@ -504,6 +503,8 @@ elif modul == "🐎 Moduł II: Patrol Księcia (Otoczka wypukła)":
             if len(aktualne_punkty) >= 2 and len(otoczka) >= 2:
                 ox, oy = zip(*(otoczka + [otoczka[0]]))
                 ax.plot(ox, oy, 'r--', linewidth=2.5, zorder=2, label="Trasa Księcia")
+                # --- WIZUALNY DOWÓD: Zaznaczamy tylko prawdziwe wierzchołki otoczki! ---
+                ax.scatter(ox, oy, color='red', edgecolors='black', s=150, zorder=4, marker='*', label="Punkty Kontrolne")
 
             ax.grid(True, linestyle='--', alpha=0.5)
             ax.set_aspect('equal', adjustable='datalim')
